@@ -8,6 +8,7 @@ author='Salome Wildermuth',
 python_requires='>=3.9',
 install_requires=[
     'nose==1.3.7',
+    'requests==2.31.0'
     'urllib3==2.1.0'
 ],
 author_email='salome.wildermuth@ewz.ch',
