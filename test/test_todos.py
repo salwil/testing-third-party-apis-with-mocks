@@ -35,9 +35,14 @@ from nose.tools import assert_is_not_none
 from nose.tools import assert_is_none
 
 from src.services import get_todos
+
+# with this decorator we can overwrite response parameters of the get-method from the requests library,
+# which is called inside the get_todos method
 @patch('src.services.requests.get')
-def test_get_todos_with_mock(mock_get):
-    # Configure the mock to return a response with an OK status code.
+def test_get_todos_with_decorator_patch(mock_get):
+    # Configure the mock to return a response with an OK status code. Note that this line is actually not needed for
+    # the assertions in this test, because the decorator already instantiates the response as a MagicMock object
+    # --> response is not None (this just leads to the ok property being explicitly true)
     mock_get.return_value.ok = True
 
     # Call the service, which will send a request to the server.
@@ -45,3 +50,17 @@ def test_get_todos_with_mock(mock_get):
 
     # If the request is sent successfully, then I expect a response to be returned.
     assert_is_not_none(response)
+
+# we can also patch a function without using a decorator:
+def test_get_todos_with_patch():
+    with patch('src.services.requests.get') as mock_get:
+        # Configure the mock to return a response with an OK status code.
+        # mock_get.return_value.ok = True
+
+        # Call the service, which will send a request to the server.
+        response = get_todos()
+
+    # If the request is sent successfully, then I expect a response to be returned.
+    assert_is_not_none(response)
+
+
