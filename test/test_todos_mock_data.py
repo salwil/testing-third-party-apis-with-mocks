@@ -80,3 +80,27 @@ def test_getting_uncompleted_todos_when_todos_is_none(mock_get_todos):
 
     # Confirm that an empty list was returned.
     assert_list_equal(uncompleted_todos, [])
+
+
+# Testing for updates to the API data (Note that we apply the context manager patching technique here)
+def test_integration_contract():
+    # Call the service to hit the actual API.
+    actual = get_todos()
+    actual_keys = actual.json().pop().keys()
+
+    # Call the service to hit the mocked API.
+    with patch('src.services.requests.get') as mock_get:
+        mock_get.return_value.ok = True
+        mock_get.return_value.json.return_value = [{
+            'userId': 1,
+            'id': 1,
+            'title': 'Make the bed',
+            'completed': False
+        }]
+
+        mocked = get_todos()
+        mocked_keys = mocked.json().pop().keys()
+
+    # An object from the actual API and an object from the mocked API should have
+    # the same data structure.
+    assert_list_equal(list(actual_keys), list(mocked_keys))
