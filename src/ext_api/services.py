@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 import requests
 
 # Local imports...
-from src.app.constants import BASE_URL
+from ext_api.constants import BASE_URL
 
 TODOS_URL = urljoin(BASE_URL, 'todos')
 

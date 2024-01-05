@@ -1,11 +1,10 @@
 from unittest.mock import patch, Mock
 
-from nose.tools import assert_is_none, assert_list_equal
+from nose.tools import assert_is_none
 
-from src.services import get_todos
+from ext_api.services import get_todos
 
-
-@patch('src.services.requests.get')
+@patch('ext_api.services.requests.get')
 def test_get_todos_with_mocked_data(mock_get):
     todos = [{
         'userId': 1,
@@ -25,7 +24,7 @@ def test_get_todos_with_mocked_data(mock_get):
     # If the request is sent successfully, then I expect a response to be returned.
     assert_list_equal(response.json(), todos)
 
-@patch('src.services.requests.get')
+@patch('ext_api.services.requests.get')
 def test_getting_todos_when_response_is_not_ok(mock_get):
     # Configure the mock to not return a response with an OK status code.
     mock_get.return_value.ok = False
@@ -37,7 +36,7 @@ def test_getting_todos_when_response_is_not_ok(mock_get):
     assert_is_none(response)
 
 
-@patch('src.services.get_todos')
+@patch('ext_api.services.get_todos')
 def test_getting_uncompleted_todos_when_todos_is_not_none(mock_get_todos):
     todo1 = {
         'userId': 1,
@@ -66,8 +65,8 @@ def test_getting_uncompleted_todos_when_todos_is_not_none(mock_get_todos):
     assert_list_equal(uncompleted_todos, [todo1])
 
 from nose.tools import assert_list_equal, assert_true
-from src.services import get_uncompleted_todos
-@patch('src.services.get_todos')
+from ext_api.services import get_uncompleted_todos
+@patch('ext_api.services.get_todos')
 def test_getting_uncompleted_todos_when_todos_is_none(mock_get_todos):
     # Configure mock to return None.
     mock_get_todos.return_value = None
@@ -89,7 +88,7 @@ def test_integration_contract():
     actual_keys = actual.json().pop().keys()
 
     # Call the service to hit the mocked API.
-    with patch('src.services.requests.get') as mock_get:
+    with patch('ext_api.services.requests.get') as mock_get:
         mock_get.return_value.ok = True
         mock_get.return_value.json.return_value = [{
             'userId': 1,

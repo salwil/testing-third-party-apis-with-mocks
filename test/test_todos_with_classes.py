@@ -5,13 +5,13 @@ from unittest.mock import Mock, patch
 from nose.tools import assert_is_none, assert_list_equal, assert_true
 
 # Local imports...
-from src.services import get_todos, get_uncompleted_todos
+from ext_api.services import get_todos, get_uncompleted_todos
 
 
 class TestTodos(object):
     @classmethod
     def setup_class(cls):
-        cls.mock_get_patcher = patch('src.services.requests.get')
+        cls.mock_get_patcher = patch('ext_api.services.requests.get')
         cls.mock_get = cls.mock_get_patcher.start()
 
     @classmethod
@@ -52,7 +52,7 @@ class TestTodos(object):
 class TestUncompletedTodos(object):
     @classmethod
     def setup_class(cls):
-        cls.mock_get_todos_patcher = patch('src.services.get_todos')
+        cls.mock_get_todos_patcher = patch('ext_api.services.get_todos')
         cls.mock_get_todos = cls.mock_get_todos_patcher.start()
 
     @classmethod
